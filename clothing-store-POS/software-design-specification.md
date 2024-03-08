@@ -15,24 +15,28 @@ The system centralizes transaction data and inventory management, offering real-
 
 ### Software Architecture Diagram
 
+![AWS](media/Architectural-diagram.png)
+
 ### Software Architecture Diagram Description
 
 The Point of Sale System for the clothing store is designed to make sales efficient and organized for employees. The software can be accessed through store registers as well as phones and tablets with Apple or Android operating systems.  These devices must first be connected to the internet, which will allow the user to access either an admin interface (for managers) or an employee interface. The admin interface allows the user to access the transaction database, which contains all the transaction history and data. Admin and regular employees can both access the inventory database, which they can update and search. These two databases make up the store database that is backed up by a cloud system, synchronizing data across different store locations. The inventory database is automatically updated through the Payment API, which handles payment from debit and credit cards, as well as cash. Credit and debit cards are processed through card readers. Employees are also able to scan items through barcode scanners. The items will then be visible on the device being used. After payment is processed, the transaction information will be printed out through a receipt printer.
 
 ### UML Class Diagram
 
+![UML](media/UML-Class-Diagram.png)
+
 ### UML Class Diagram Description
 
 This UML diagram effectively visualizes the structure of a clothing store POS software system, outlining the relationships between users, transactions, payments, inventory, and data storage, both locally and in the cloud.
 
-#### Connections
+- _**Connections**_
 
 Solid lines represent associations, showing how instances of one class are connected to instances of another, indicating relationships or collaboration between classes.
 
 Dashed lines represent dependencies, indicating that a class uses another class in some capacity, but not necessarily holding a reference to it.
 
 
-#### User (Abstract Class)
+- _**User (Abstract Class)**_
 
 Represents a generic user in the system, serving as a base class for more specific types of users.
 
@@ -55,7 +59,7 @@ logout(): void - A method for the user to log out of the system.
 checkPermissions(): Boolean - A method to check if the user has the permissions to perform a certain operation.
 
 
-#### Admin (Extends User)
+- _**Admin (Extends User)**_
 
 A specialized type of User with administrative privileges.
 
@@ -70,7 +74,7 @@ manageUsers(userID: String, action: String): Boolean - Enables the admin to mana
 generateReport(): void - Allows the admin to generate different types of reports.
 
 
-#### Employee (Extends User)
+- _**Employee (Extends User)**_
 
 A specialized type of User who handles daily transactions and inventory management.
 
@@ -87,7 +91,7 @@ processReturn(itemID: String): Boolean - Processes the return of an item and ind
 searchInventory(searchTerm: String): InventoryItem[] - Searches the inventory with a given term and returns a list of items.
 
 
-#### Register
+- _**Register**_
 
 The point of interaction for processing sales and managing payments.
 
@@ -116,7 +120,7 @@ updateInventory(item: Item, quantity: Int): void - Updates the inventory based o
 checkInventory(itemID: String): void - Checks the inventory level of a specific item.
 
 
-#### PaymentProcessor
+- _**PaymentProcessor**_
 
 Handles the processing of various types of payments, interfacing with external payment systems as necessary.
 
@@ -135,7 +139,7 @@ processCreditPayment(amount: Money, cardDetails: CardDetails): PaymentStatus - P
 processCashPayment(amount: Float, transactionDetails: Transaction): PaymentStatus - Records the details of a transaction paid with cash. While no electronic authorization is required, this method logs the transaction for record-keeping, ensuring cash payments are accounted for within the system. The amount is the cash received, and transactionDetails includes data such as transaction ID and items involved. The method returns a PaymentStatus that would typically indicate a successful recording of the transaction.
 
 
-#### TransactionDatabase
+- _**TransactionDatabase**_
 
 Stores and manages the transaction records.
 
@@ -146,7 +150,7 @@ logTransactions(): Records new transactions in the database.
 retrieveTransactionHistory(): Retrieves the history of transactions.
 
 
-#### Transaction
+- _**Transaction**_
 
 Represents a single financial transaction.
 
@@ -167,7 +171,7 @@ paymentType: String - The method of payment used.
 createTransaction(), refundTransaction(), getTransactionDetails() - Creates a new transaction, processes a refund, and retrieves details of transactions.
 
 
-#### InventoryDatabase
+- _**InventoryDatabase**_
 
 Manages the storage and retrieval of inventory records.
 
@@ -176,7 +180,7 @@ Manages the storage and retrieval of inventory records.
 updateItemRecord(), getItemRecord(), getInventoryReport() - Updates an item record, retrieves an item's record, and generates an inventory report.
 
 
-#### Inventory
+- _**Inventory**_
 
 Represents the collection of all items available for sale.
 
@@ -191,8 +195,9 @@ lastUpdated: DateTime - The last time the inventory was updated.
 addItem(), removeItem(), searchItem(), updateInventory() - Adds a new item, removes an item, searches for items, and updates the inventory.
 
 
-#### Item
-Overview: Represents an individual item in the inventory.
+- _**Item**_
+
+Represents an individual item in the inventory.
 
 **Attributes:**
 
@@ -214,7 +219,7 @@ dateAdded: DateTime - The date the item was added to the inventory.
 updateQuantity(), setDescription() - Updates the quantity of an item and sets its description.
 
 
-#### StoreDatabase
+- _**StoreDatabase**_
 
 Represents the local database where store-related data are kept.
 
@@ -229,7 +234,7 @@ securitySettings - The settings to ensure secure access and data storage.
 connect(), disconnect(), backup(), syncWithCloud() - Connects to, disconnects from, backs up, and synchronizes the database with the cloud.
 
 
-#### CloudDatabase
+- _**CloudDatabase**_
 
 Overview: Represents the cloud-based service used for data backup and synchronization.
 
